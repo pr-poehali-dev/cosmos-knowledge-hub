@@ -69,40 +69,88 @@ const PLANETS = [
 
 const GALAXIES = [
   {
-    name: "Млечный Путь", type: "Спиральная", stars: "200-400 млрд",
-    size: "100 000 св. лет", color: "from-blue-400 to-purple-600",
-    desc: "Наш космический дом — спиральная галактика с баром в центре. Солнечная система находится в рукаве Ориона, в 26 000 световых лет от центра.",
-    fact: "Чёрная дыра Стрелец А* в центре в 4 миллиона раз тяжелее Солнца"
+    name: "Млечный Путь", type: "Спиральная SBbc", stars: "200–400 млрд",
+    size: "100 000 св. лет", color: "from-blue-400 to-purple-600", age: "13.6 млрд лет",
+    dist: "— (мы внутри)", bh: "Стрелец А* · 4 млн М☉",
+    desc: "Наш космический дом — спиральная галактика с баром в центре. Солнечная система находится в рукаве Ориона, в 26 000 световых лет от центра галактики.",
+    fact: "Чёрная дыра Стрелец А* в центре в 4 миллиона раз тяжелее Солнца. В 2022 году впервые сфотографирована."
   },
   {
-    name: "Андромеда (M31)", type: "Спиральная", stars: "1 триллион",
-    size: "220 000 св. лет", color: "from-indigo-400 to-blue-600",
-    desc: "Ближайшая к нам крупная галактика. Через 4.5 миллиарда лет она столкнётся с Млечным Путём.",
-    fact: "Видна невооружённым глазом — это самый далёкий объект, различимый без телескопа"
+    name: "Андромеда (M31)", type: "Спиральная SA(s)b", stars: "1 триллион",
+    size: "220 000 св. лет", color: "from-indigo-400 to-blue-600", age: "10 млрд лет",
+    dist: "2.537 млн св. лет", bh: "P2 · 100 млн М☉",
+    desc: "Ближайшая к нам крупная галактика. Через 4.5 миллиарда лет она столкнётся с Млечным Путём, образовав новую галактику «Млекомеда».",
+    fact: "Видна невооружённым глазом — это самый далёкий объект, различимый без телескопа при тёмном небе."
   },
   {
-    name: "Водоворот (M51)", type: "Спиральная", stars: "160 млрд",
-    size: "76 000 св. лет", color: "from-teal-400 to-cyan-600",
-    desc: "Первая галактика, в которой была обнаружена спиральная структура. Взаимодействует с галактикой-компаньоном NGC 5195.",
-    fact: "Находится на расстоянии 23 миллиона световых лет от Земли"
+    name: "Водоворот (M51)", type: "Спиральная SAbc", stars: "160 млрд",
+    size: "76 000 св. лет", color: "from-teal-400 to-cyan-600", age: "400 млн лет",
+    dist: "23 млн св. лет", bh: "NGC 5194* · 1 млн М☉",
+    desc: "Первая галактика, в которой была обнаружена спиральная структура (1845). Взаимодействует со своим спутником NGC 5195, который деформирует её рукава.",
+    fact: "Первая рентгеновская экзопланета (M51b) была обнаружена именно в этой галактике в 2021 году."
   },
   {
-    name: "Сомбреро (M104)", type: "Линзообразная", stars: "200 млрд",
-    size: "50 000 св. лет", color: "from-amber-400 to-orange-600",
-    desc: "Загадочная галактика с огромной центральной выпуклостью и тёмной полосой пыли. Напоминает мексиканское сомбреро.",
-    fact: "Содержит одну из самых массивных чёрных дыр — в миллиард масс Солнца"
+    name: "Сомбреро (M104)", type: "Линзообразная SA(s)a", stars: "200 млрд",
+    size: "50 000 св. лет", color: "from-amber-400 to-orange-600", age: "13 млрд лет",
+    dist: "29.3 млн св. лет", bh: "Центральная · 1 млрд М☉",
+    desc: "Загадочная галактика с огромной центральной выпуклостью и тёмной полосой пыли. Имеет необычно большое шаровое скопление для своего размера.",
+    fact: "Содержит одну из самых массивных известных чёрных дыр — в 1 миллиард масс Солнца."
   },
   {
-    name: "Антенны", type: "Взаимодействующие", stars: "300+ млрд",
-    size: "500 000 св. лет", color: "from-rose-400 to-pink-600",
-    desc: "Две сталкивающиеся галактики, образующие гигантские «антенны» из звёзд. Идеальная лаборатория для изучения слияний галактик.",
-    fact: "В области столкновения рождаются тысячи новых звёзд одновременно"
+    name: "Галактика Антенны", type: "Взаимодействующие", stars: "300+ млрд",
+    size: "500 000 св. лет", color: "from-rose-400 to-pink-600", age: "Слияние 1.2 млрд лет",
+    dist: "65 млн св. лет", bh: "Два ядра сближаются",
+    desc: "Две сталкивающиеся галактики NGC 4038 и NGC 4039, образующие гигантские «антенны» из выброшенных звёзд. Эталон для изучения слияний галактик.",
+    fact: "В зоне столкновения за последний миллиард лет родилось более 1 000 массивных звёздных скоплений."
   },
   {
     name: "Бол. Магелланово Облако", type: "Карликовая неправильная", stars: "30 млрд",
-    size: "14 000 св. лет", color: "from-yellow-300 to-amber-500",
-    desc: "Спутник Млечного Пути, видимый невооружённым глазом в Южном полушарии. Содержит Туманность Тарантул.",
-    fact: "Туманность Тарантул — крупнейшая известная область звездообразования"
+    size: "14 000 св. лет", color: "from-yellow-300 to-amber-500", age: "13.5 млрд лет",
+    dist: "163 000 св. лет", bh: "Не подтверждена",
+    desc: "Спутник Млечного Пути, видимый невооружённым глазом в Южном полушарии. Содержит Туманность Тарантул — крупнейшую зону звездообразования в Местной группе.",
+    fact: "В 1987 году здесь вспыхнула сверхновая SN 1987A — ближайшая к нам за последние 400 лет."
+  },
+  {
+    name: "Треугольника (M33)", type: "Спиральная SA(s)cd", stars: "40 млрд",
+    size: "60 000 св. лет", color: "from-green-400 to-emerald-600", age: "13.2 млрд лет",
+    dist: "2.73 млн св. лет", bh: "Нет или менее 3000 М☉",
+    desc: "Третья по величине галактика Местной группы после Андромеды и Млечного Пути. Уникальна почти полным отсутствием центральной чёрной дыры — редчайший случай.",
+    fact: "Самый далёкий объект, который человек может увидеть невооружённым глазом в идеальных условиях."
+  },
+  {
+    name: "Колесо Телеги", type: "Кольцеобразная", stars: "100 млрд",
+    size: "150 000 св. лет", color: "from-cyan-400 to-sky-600", age: "Кольцо — 300 млн лет",
+    dist: "500 млн св. лет", bh: "Не изучена",
+    desc: "Результат столкновения двух галактик. Ударная волна породила кольцо из звёзд диаметром 150 000 световых лет. Телескоп Джеймс Уэбб раскрыл новые детали в 2022 году.",
+    fact: "Кольцо расширяется со скоростью 18 000 км/ч. Внутри кольца рождаются сотни новых звёзд каждый год."
+  },
+  {
+    name: "Сигара (M82)", type: "Иррегулярная/Бурная", stars: "30 млрд",
+    size: "37 000 св. лет", color: "from-red-400 to-orange-500", age: "Вспышка — 600 млн лет",
+    dist: "12 млн св. лет", bh: "M82 X-1 · 400 М☉",
+    desc: "«Взрывная» галактика — активный звёздообразующий регион. Из её центра выбиваются гигантские плазменные струи протяжённостью 10 000 световых лет.",
+    fact: "В 2014 году здесь вспыхнула ближайшая к нам за последние 40 лет сверхновая — SN 2014J."
+  },
+  {
+    name: "NGC 1300", type: "Спиральная SB(s)bc", stars: "100 млрд",
+    size: "110 000 св. лет", color: "from-violet-400 to-purple-600", age: "12 млрд лет",
+    dist: "61 млн св. лет", bh: "Центральная",
+    desc: "Классический образец спиральной галактики с баром. Телескоп Хаббл сделал один из самых детальных снимков этой галактики в 2005 году — он стал иконой астрофотографии.",
+    fact: "Бар NGC 1300 содержит небольшую спиральную структуру в самом центре — «спираль внутри спирали»."
+  },
+  {
+    name: "Centaurus A (NGC 5128)", type: "Линзообразная пекулярная", stars: "300 млрд",
+    size: "97 000 св. лет", color: "from-orange-400 to-red-600", age: "13 млрд лет",
+    dist: "13.7 млн св. лет", bh: "Centaurus A* · 55 млн М☉",
+    desc: "Ближайшая к нам активная галактика — радиогалактика с колоссальными джетами. Поглощает меньшую спиральную галактику, отчего имеет тёмную полосу пыли поперёк.",
+    fact: "Джеты частиц, выброшенных чёрной дырой, простираются на 13 000 световых лет и видны даже в радиодиапазоне."
+  },
+  {
+    name: "IC 1101", type: "Эллиптическая", stars: "100 триллионов",
+    size: "6 000 000 св. лет", color: "from-slate-400 to-gray-600", age: "12 млрд лет",
+    dist: "1.07 млрд св. лет", bh: "40 млрд М☉ (оценка)",
+    desc: "Крупнейшая из известных галактик — суперэллиптический монстр в центре скопления Abell 2029. Если бы она стояла на месте Млечного Пути, поглотила бы Андромеду и всю Местную группу.",
+    fact: "Диаметр IC 1101 в 60 раз больше Млечного Пути. Она образовалась из слияния множества галактик за миллиарды лет."
   },
 ];
 
@@ -207,6 +255,192 @@ const MYSTERIES = [
     content: "Звезда KIC 8462852 демонстрирует хаотичные затемнения — иногда теряя до 22% яркости. Ни одна известная астрофизическая теория не объясняет такое поведение полностью. В 2015 году учёные даже предложили гипотезу мегаструктуры инопланетной цивилизации. Загадка не решена."
   },
 ];
+
+// ===== DRAGGABLE 3D PLANET =====
+function DraggablePlanet({ planet }: { planet: typeof PLANETS[0] }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const stateRef = useRef({
+    rotX: 0.3, rotY: 0,
+    velX: 0, velY: 0.008,
+    dragging: false,
+    lastX: 0, lastY: 0,
+  });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const SIZE = canvas.width;
+    const R = SIZE / 2 - 8;
+    const s = stateRef.current;
+
+    // Parse colors from tailwind gradient
+    const colorMap: Record<string, [string, string]> = {
+      "from-gray-400 to-gray-600": ["#9ca3af","#4b5563"],
+      "from-yellow-300 to-orange-400": ["#fde047","#fb923c"],
+      "from-blue-400 to-green-500": ["#60a5fa","#22c55e"],
+      "from-red-400 to-orange-600": ["#f87171","#ea580c"],
+      "from-orange-300 to-amber-600": ["#fdba74","#d97706"],
+      "from-yellow-200 to-amber-400": ["#fef08a","#fbbf24"],
+      "from-cyan-300 to-teal-400": ["#67e8f9","#2dd4bf"],
+      "from-blue-500 to-indigo-600": ["#3b82f6","#4f46e5"],
+    };
+    const [c1, c2] = colorMap[planet.color] ?? ["#60a5fa","#a855f7"];
+
+    let animId: number;
+
+    function drawPlanet() {
+      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, SIZE, SIZE);
+      const cx = SIZE / 2, cy = SIZE / 2;
+
+      // Outer glow
+      const glow = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, R + 20);
+      glow.addColorStop(0, c1 + "00");
+      glow.addColorStop(0.7, c1 + "22");
+      glow.addColorStop(1, c1 + "00");
+      ctx.beginPath();
+      ctx.arc(cx, cy, R + 20, 0, Math.PI * 2);
+      ctx.fillStyle = glow;
+      ctx.fill();
+
+      // Planet body
+      const grad = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.05, cx, cy, R);
+      grad.addColorStop(0, "#ffffff55");
+      grad.addColorStop(0.15, c1);
+      grad.addColorStop(0.7, c2);
+      grad.addColorStop(1, c2 + "99");
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Surface bands (latitude lines projected by rotation)
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx.clip();
+
+      const bands = 7;
+      for (let i = 0; i < bands; i++) {
+        const t = (i / bands) * Math.PI * 2 + s.rotX;
+        const y = cy + Math.sin(t) * R * 0.85;
+        const scaleY = Math.abs(Math.cos(t)) * 0.18 + 0.02;
+        const rx = R * (0.7 + 0.3 * Math.abs(Math.cos(s.rotY)));
+        const ry = R * scaleY;
+        ctx.beginPath();
+        ctx.ellipse(cx, y, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${0.04 + 0.03 * Math.sin(i)})`;
+        ctx.fill();
+      }
+
+      // Longitude shimmer lines
+      const lons = 5;
+      for (let i = 0; i < lons; i++) {
+        const a = s.rotY + (i / lons) * Math.PI * 2;
+        const xOff = Math.sin(a) * R;
+        if (Math.cos(a) < 0) continue;
+        ctx.beginPath();
+        ctx.ellipse(cx + xOff * 0.3, cy, Math.abs(xOff) * 0.15, R, 0, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255,255,255,0.03)";
+        ctx.fill();
+      }
+
+      ctx.restore();
+
+      // Highlight
+      const hl = ctx.createRadialGradient(cx - R * 0.4, cy - R * 0.4, 0, cx - R * 0.2, cy - R * 0.2, R * 0.7);
+      hl.addColorStop(0, "rgba(255,255,255,0.25)");
+      hl.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx.fillStyle = hl;
+      ctx.fill();
+
+      // Saturn rings
+      if (planet.name === "Сатурн") {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(1, 0.28);
+        for (let r = R + 10; r <= R + 36; r += 6) {
+          ctx.beginPath();
+          ctx.arc(0, 0, r, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(251,191,36,${0.3 - (r - R - 10) * 0.006})`;
+          ctx.lineWidth = 4;
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // Rotate
+      if (!s.dragging) {
+        s.rotY += s.velY;
+        s.rotX += s.velX * 0.3;
+        s.velX *= 0.97;
+        s.velY *= 0.999;
+        if (Math.abs(s.velY) < 0.006) s.velY = 0.006;
+      }
+
+      animId = requestAnimationFrame(drawPlanet);
+    }
+
+    drawPlanet();
+
+    // Mouse events
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      s.dragging = true;
+      const pt = "touches" in e ? e.touches[0] : e;
+      s.lastX = pt.clientX; s.lastY = pt.clientY;
+      s.velX = 0; s.velY = 0;
+    };
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      if (!s.dragging) return;
+      e.preventDefault();
+      const pt = "touches" in e ? e.touches[0] : e;
+      const dx = pt.clientX - s.lastX;
+      const dy = pt.clientY - s.lastY;
+      s.velY = dx * 0.015;
+      s.velX = dy * 0.015;
+      s.rotY += s.velY;
+      s.rotX += s.velX;
+      s.lastX = pt.clientX; s.lastY = pt.clientY;
+    };
+    const onUp = () => { s.dragging = false; };
+
+    canvas.addEventListener("mousedown", onDown);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    canvas.addEventListener("touchstart", onDown, { passive: false });
+    window.addEventListener("touchmove", onMove, { passive: false });
+    window.addEventListener("touchend", onUp);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      canvas.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+      canvas.removeEventListener("touchstart", onDown);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onUp);
+    };
+  }, [planet]);
+
+  return (
+    <div className="relative group">
+      <canvas
+        ref={canvasRef}
+        width={220}
+        height={220}
+        className="cursor-grab active:cursor-grabbing select-none"
+        style={{ touchAction: "none" }}
+      />
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <span className="font-oswald text-[9px] tracking-widest text-white/40 uppercase bg-black/40 px-2 py-1 rounded-full">тяни для вращения</span>
+      </div>
+    </div>
+  );
+}
 
 // ===== SOLAR SYSTEM CANVAS =====
 function SolarSystemCanvas() {
@@ -716,44 +950,72 @@ const Index = () => {
               <div className="absolute top-3 right-4">
                 <span className="font-oswald text-[10px] tracking-widest text-white/30">Нажми на точку</span>
               </div>
-              {GALAXIES.map((g, i) => {
+              {(() => {
                 const positions = [
-                  { top: "50%", left: "50%" },
-                  { top: "25%", left: "70%" },
-                  { top: "65%", left: "28%" },
-                  { top: "75%", left: "65%" },
-                  { top: "30%", left: "22%" },
-                  { top: "15%", left: "48%" },
+                  { top: "50%", left: "50%", size: 7 },
+                  { top: "25%", left: "70%", size: 6 },
+                  { top: "65%", left: "28%", size: 5 },
+                  { top: "75%", left: "65%", size: 5 },
+                  { top: "30%", left: "22%", size: 4 },
+                  { top: "15%", left: "48%", size: 4 },
+                  { top: "55%", left: "82%", size: 4 },
+                  { top: "85%", left: "40%", size: 5 },
+                  { top: "20%", left: "38%", size: 4 },
+                  { top: "60%", left: "12%", size: 3 },
+                  { top: "40%", left: "88%", size: 3 },
+                  { top: "88%", left: "75%", size: 6 },
                 ];
-                return (
+                return GALAXIES.map((g, i) => (
                   <button
                     key={i}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 group"
-                    style={{ top: positions[i].top, left: positions[i].left }}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 group z-10"
+                    style={{ top: positions[i]?.top ?? "50%", left: positions[i]?.left ?? "50%" }}
                     onClick={() => setActiveGalaxy(activeGalaxy === i ? null : i)}
                   >
-                    <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${g.color} transition-transform duration-300 ${activeGalaxy === i ? "scale-150" : "group-hover:scale-125"} relative z-10`} />
-                    <div className={`absolute inset-0 rounded-full bg-white/20 transition-all duration-300 ${activeGalaxy === i ? "scale-300 opacity-0" : "opacity-0 group-hover:opacity-50 group-hover:scale-200"}`} />
-                    <span className="absolute top-6 left-1/2 -translate-x-1/2 font-oswald text-[9px] tracking-widest text-white/60 whitespace-nowrap">{g.name}</span>
+                    <div
+                      className={`rounded-full bg-gradient-to-br ${g.color} transition-all duration-300 ${activeGalaxy === i ? "scale-150 ring-2 ring-white/30" : "group-hover:scale-125"} relative z-10`}
+                      style={{ width: (positions[i]?.size ?? 5) * 3, height: (positions[i]?.size ?? 5) * 3 }}
+                    />
+                    <span className="absolute top-7 left-1/2 -translate-x-1/2 font-oswald text-[8px] tracking-widest text-white/50 whitespace-nowrap bg-black/40 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">{g.name}</span>
                   </button>
-                );
-              })}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-15" xmlns="http://www.w3.org/2000/svg">
-                <line x1="50%" y1="50%" x2="70%" y2="25%" stroke="#00c8ff" strokeWidth="0.8" strokeDasharray="5,5" />
-                <line x1="50%" y1="50%" x2="28%" y2="65%" stroke="#a855f7" strokeWidth="0.8" strokeDasharray="5,5" />
-                <line x1="50%" y1="50%" x2="65%" y2="75%" stroke="#2dd4bf" strokeWidth="0.8" strokeDasharray="5,5" />
-                <line x1="50%" y1="50%" x2="22%" y2="30%" stroke="#fbbf24" strokeWidth="0.8" strokeDasharray="5,5" />
-                <line x1="50%" y1="50%" x2="48%" y2="15%" stroke="#f472b6" strokeWidth="0.8" strokeDasharray="5,5" />
+                ));
+              })()}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-10" xmlns="http://www.w3.org/2000/svg">
+                <line x1="50%" y1="50%" x2="70%" y2="25%" stroke="#00c8ff" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="28%" y2="65%" stroke="#a855f7" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="65%" y2="75%" stroke="#2dd4bf" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="22%" y2="30%" stroke="#fbbf24" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="48%" y2="15%" stroke="#f472b6" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="82%" y2="55%" stroke="#67e8f9" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="40%" y2="85%" stroke="#fb923c" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="38%" y2="20%" stroke="#4ade80" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="12%" y2="60%" stroke="#e879f9" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="88%" y2="40%" stroke="#94a3b8" strokeWidth="0.7" strokeDasharray="4,6" />
+                <line x1="50%" y1="50%" x2="75%" y2="88%" stroke="#f59e0b" strokeWidth="0.7" strokeDasharray="4,6" />
               </svg>
             </div>
 
             {activeGalaxy !== null && (
               <div className={`mt-4 p-5 rounded-xl bg-gradient-to-br ${GALAXIES[activeGalaxy].color} border border-white/10`}>
                 <div className="flex items-start justify-between gap-4">
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-cormorant text-2xl">{GALAXIES[activeGalaxy].name}</h3>
-                    <span className="font-oswald text-xs text-white/50 tracking-widest">{GALAXIES[activeGalaxy].type} · {GALAXIES[activeGalaxy].stars} звёзд · {GALAXIES[activeGalaxy].size}</span>
-                    <p className="mt-3 text-white/70 text-sm leading-relaxed">{GALAXIES[activeGalaxy].desc}</p>
+                    <div className="flex flex-wrap gap-3 mt-2 mb-3">
+                      {[
+                        { l: "Тип", v: GALAXIES[activeGalaxy].type },
+                        { l: "Звёзд", v: GALAXIES[activeGalaxy].stars },
+                        { l: "Размер", v: GALAXIES[activeGalaxy].size },
+                        { l: "Расстояние", v: GALAXIES[activeGalaxy].dist },
+                        { l: "Возраст", v: GALAXIES[activeGalaxy].age },
+                        { l: "Чёрная дыра", v: GALAXIES[activeGalaxy].bh },
+                      ].map((item, k) => (
+                        <div key={k} className="px-2 py-1 rounded-lg bg-white/5 border border-white/10">
+                          <div className="font-oswald text-[8px] text-white/30 tracking-widest">{item.l}</div>
+                          <div className="text-white/80 text-xs">{item.v}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-white/70 text-sm leading-relaxed">{GALAXIES[activeGalaxy].desc}</p>
                     <div className="mt-3 p-3 rounded-lg bg-white/5 border border-white/10">
                       <span className="font-oswald text-[10px] text-cosmos-gold tracking-widest">ФАКТ: </span>
                       <span className="text-white/60 text-xs">{GALAXIES[activeGalaxy].fact}</span>
@@ -772,12 +1034,20 @@ const Index = () => {
               <div
                 key={i}
                 className="reveal cosmos-card rounded-xl p-5 cursor-pointer"
-                style={{ transitionDelay: `${i * 0.08}s` }}
+                style={{ transitionDelay: `${i * 0.06}s` }}
                 onClick={() => setActiveGalaxy(i)}
               >
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${g.color} mb-4`} style={{ animation: `float ${6 + i * 0.5}s ease-in-out infinite ${i * 0.5}s` }} />
-                <div className="font-cormorant text-xl mb-1">{g.name}</div>
-                <div className="font-oswald text-[10px] text-white/40 tracking-widest mb-3">{g.type} · {g.stars}</div>
+                <div className="flex items-start gap-4 mb-3">
+                  <div className={`w-14 h-14 shrink-0 rounded-full bg-gradient-to-br ${g.color}`} style={{ animation: `float ${6 + i * 0.5}s ease-in-out infinite ${i * 0.5}s` }} />
+                  <div>
+                    <div className="font-cormorant text-xl leading-tight">{g.name}</div>
+                    <div className="font-oswald text-[9px] text-white/40 tracking-widest mt-1">{g.type}</div>
+                  </div>
+                </div>
+                <div className="flex gap-2 mb-3 flex-wrap">
+                  <span className="font-oswald text-[9px] text-cosmos-blue/70 bg-cosmos-blue/10 border border-cosmos-blue/20 px-2 py-0.5 rounded-full">{g.stars} ⭐</span>
+                  <span className="font-oswald text-[9px] text-white/40 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">{g.dist}</span>
+                </div>
                 <p className="text-white/50 text-xs leading-relaxed line-clamp-2">{g.desc}</p>
               </div>
             ))}
@@ -815,12 +1085,8 @@ const Index = () => {
 
           <div className="reveal cosmos-card rounded-2xl p-6 md:p-10 mb-10">
             <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
-              <div className="relative shrink-0">
-                <div
-                  className={`planet-3d w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br ${PLANETS[activePlanet].color}`}
-                  style={{ boxShadow: "0 0 40px rgba(0,200,255,0.2), 0 0 80px rgba(0,200,255,0.05)" }}
-                />
-                <div className="absolute -inset-6 rounded-full border border-white/5 animate-spin-slow" />
+              <div className="relative shrink-0 flex flex-col items-center">
+                <DraggablePlanet key={activePlanet} planet={PLANETS[activePlanet]} />
               </div>
               <div className="flex-1">
                 <h3 className="font-cormorant text-4xl md:text-5xl mb-2">{PLANETS[activePlanet].emoji} {PLANETS[activePlanet].name}</h3>
