@@ -3,14 +3,17 @@ import Icon from "@/components/ui/icon";
 
 const NEBULA_IMG = "https://cdn.poehali.dev/projects/f039dd6d-687e-48a3-835a-1a3ddd936a3b/files/0537366b-1c51-4c46-a17d-62d29b3f3538.jpg";
 const GALAXY_IMG = "https://cdn.poehali.dev/projects/f039dd6d-687e-48a3-835a-1a3ddd936a3b/files/70930704-ed01-4861-8b3b-cb7298b0c5ab.jpg";
+const BLACKHOLE_IMG = "https://cdn.poehali.dev/projects/f039dd6d-687e-48a3-835a-1a3ddd936a3b/files/4f94eb66-8839-48bf-b7ca-064a082159b1.jpg";
 
-const SECTIONS = ["home", "galaxies", "planets", "mythology", "mysteries"];
+const SECTIONS = ["home", "galaxies", "planets", "blackholes", "mythology", "mysteries", "records"];
 const NAV_LABELS: Record<string, string> = {
   home: "Главная",
   galaxies: "Галактики",
   planets: "Планеты",
+  blackholes: "Чёрные дыры",
   mythology: "Мифология",
   mysteries: "Загадки",
+  records: "Рекорды",
 };
 
 const PLANETS = [
@@ -202,6 +205,259 @@ const MYSTERIES = [
     accent: "#f59e0b",
     short: "Звезда с необъяснимыми затемнениями — до 22% яркости",
     content: "Звезда KIC 8462852 демонстрирует хаотичные затемнения — иногда теряя до 22% яркости. Ни одна известная астрофизическая теория не объясняет такое поведение полностью. В 2015 году учёные даже предложили гипотезу мегаструктуры инопланетной цивилизации. Загадка не решена."
+  },
+];
+
+// ===== SOLAR SYSTEM CANVAS =====
+function SolarSystemCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+
+    const planetData = [
+      { name: "Меркурий", radius: 3, orbit: 60, speed: 0.047, color: "#9ca3af", angle: 0 },
+      { name: "Венера",   radius: 5, orbit: 90, speed: 0.035, color: "#fcd34d", angle: 1 },
+      { name: "Земля",    radius: 6, orbit: 120, speed: 0.029, color: "#3b82f6", angle: 2 },
+      { name: "Марс",     radius: 4, orbit: 155, speed: 0.024, color: "#ef4444", angle: 3 },
+      { name: "Юпитер",   radius: 14, orbit: 210, speed: 0.013, color: "#f97316", angle: 4 },
+      { name: "Сатурн",   radius: 11, orbit: 265, speed: 0.009, color: "#eab308", angle: 5, ring: true },
+      { name: "Уран",     radius: 8, orbit: 310, speed: 0.006, color: "#67e8f9", angle: 6 },
+      { name: "Нептун",   radius: 7, orbit: 345, speed: 0.005, color: "#6366f1", angle: 7 },
+    ];
+
+    let animId: number;
+    let time = 0;
+    let mouseX = 0, mouseY = 0;
+    let currentHover: string | null = null;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    };
+    canvas.addEventListener("mousemove", handleMouseMove);
+
+    function draw() {
+      if (!canvas || !ctx) return;
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Sun glow
+      const sunGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 50);
+      sunGlow.addColorStop(0, "rgba(255,220,50,0.9)");
+      sunGlow.addColorStop(0.4, "rgba(255,150,20,0.5)");
+      sunGlow.addColorStop(1, "rgba(255,100,0,0)");
+      ctx.beginPath();
+      ctx.arc(cx, cy, 50, 0, Math.PI * 2);
+      ctx.fillStyle = sunGlow;
+      ctx.fill();
+
+      // Sun core
+      const sunCore = ctx.createRadialGradient(cx, cy, 0, cx, cy, 18);
+      sunCore.addColorStop(0, "#fff7cd");
+      sunCore.addColorStop(0.5, "#fbbf24");
+      sunCore.addColorStop(1, "#f97316");
+      ctx.beginPath();
+      ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+      ctx.fillStyle = sunCore;
+      ctx.fill();
+
+      let newHover: string | null = null;
+
+      planetData.forEach((p) => {
+        const angle = p.angle + time * p.speed;
+        const x = cx + Math.cos(angle) * p.orbit;
+        const y = cy + Math.sin(angle) * p.orbit;
+
+        // Orbit ring
+        ctx.beginPath();
+        ctx.arc(cx, cy, p.orbit, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255,255,255,0.06)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Check hover
+        const dist = Math.sqrt((mouseX - x) ** 2 + (mouseY - y) ** 2);
+        const isHovered = dist < p.radius + 8;
+        if (isHovered) newHover = p.name;
+
+        // Saturn rings
+        if (p.ring) {
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.scale(1, 0.35);
+          ctx.beginPath();
+          ctx.arc(0, 0, p.radius + 8, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(234,179,8,0.4)";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Planet glow if hovered
+        if (isHovered) {
+          const hg = ctx.createRadialGradient(x, y, 0, x, y, p.radius + 15);
+          hg.addColorStop(0, p.color + "60");
+          hg.addColorStop(1, "transparent");
+          ctx.beginPath();
+          ctx.arc(x, y, p.radius + 15, 0, Math.PI * 2);
+          ctx.fillStyle = hg;
+          ctx.fill();
+        }
+
+        // Planet body
+        const grad = ctx.createRadialGradient(x - p.radius * 0.3, y - p.radius * 0.3, 0, x, y, p.radius);
+        grad.addColorStop(0, "#ffffff80");
+        grad.addColorStop(0.3, p.color);
+        grad.addColorStop(1, p.color + "88");
+        ctx.beginPath();
+        ctx.arc(x, y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Label on hover
+        if (isHovered) {
+          ctx.font = "bold 11px Oswald, sans-serif";
+          ctx.fillStyle = "#ffffff";
+          ctx.textAlign = "center";
+          ctx.fillText(p.name, x, y - p.radius - 8);
+        }
+      });
+
+      if (newHover !== currentHover) {
+        currentHover = newHover;
+        setHoveredPlanet(newHover);
+        canvas.style.cursor = newHover ? "pointer" : "default";
+      }
+
+      time += 0.5;
+      animId = requestAnimationFrame(draw);
+    }
+
+    draw();
+    window.addEventListener("resize", resize);
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  return (
+    <div className="relative w-full h-80 md:h-[480px]">
+      <canvas ref={canvasRef} className="w-full h-full" />
+      {hoveredPlanet && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 font-oswald text-xs tracking-widest text-cosmos-blue/80 bg-black/60 backdrop-blur-sm px-4 py-2 rounded-full border border-cosmos-blue/20">
+          {hoveredPlanet}
+        </div>
+      )}
+      <div className="absolute top-3 right-4">
+        <span className="font-oswald text-[9px] tracking-widest text-white/25 uppercase">Анимация в реальном времени</span>
+      </div>
+    </div>
+  );
+}
+
+const BLACK_HOLES = [
+  {
+    name: "Стрелец А*",
+    mass: "4 000 000 М☉",
+    location: "Центр Млечного Пути",
+    distance: "26 000 св. лет",
+    color: "from-orange-500/20 to-amber-600/20",
+    border: "border-orange-500/30",
+    icon: "🌑",
+    desc: "Сверхмассивная чёрная дыра в самом центре нашей Галактики. В 2022 году получено её первое прямое изображение благодаря телескопу Event Horizon Telescope. Звёзды вблизи неё мчатся со скоростью 1% от скорости света.",
+    fact: "Каждые 10 000 лет к ней падает крупный объект, вызывая вспышки рентгеновского излучения"
+  },
+  {
+    name: "M87*",
+    mass: "6 500 000 000 М☉",
+    location: "Галактика Мессье 87",
+    distance: "53 млн св. лет",
+    color: "from-purple-500/20 to-indigo-600/20",
+    border: "border-purple-500/30",
+    icon: "🌀",
+    desc: "Первая чёрная дыра, которую удалось сфотографировать (2019). Её масса в 6.5 миллиарда раз превышает массу Солнца. Выбрасывает релятивистский джет длиной 5 000 световых лет.",
+    fact: "Горизонт событий M87* больше всей Солнечной системы"
+  },
+  {
+    name: "TON 618",
+    mass: "66 000 000 000 М☉",
+    location: "Созвездие Гончих Псов",
+    distance: "10.4 млрд св. лет",
+    color: "from-red-500/20 to-rose-600/20",
+    border: "border-red-500/30",
+    icon: "💫",
+    desc: "Одна из самых массивных известных чёрных дыр. Её светимость в 140 триллионов раз больше светимости Солнца. Относится к типу ультра-яркого квазара.",
+    fact: "Диаметр горизонта событий — 1 300 а.е. (1 а.е. = расстояние Земля–Солнце)"
+  },
+  {
+    name: "Чёрная дыра Холмса",
+    mass: "21 М☉",
+    location: "Созвездие Лебедя",
+    distance: "8 000 св. лет",
+    color: "from-teal-500/20 to-cyan-600/20",
+    border: "border-teal-500/30",
+    icon: "⭐",
+    desc: "Звёздная чёрная дыра в двойной системе Лебедь X-1 — первый надёжно подтверждённый кандидат в чёрные дыры (1971). Поглощает вещество своей звезды-компаньона.",
+    fact: "Стивен Хокинг проспорил, что это не чёрная дыра — и проиграл пари"
+  },
+];
+
+const NEBULAE = [
+  {
+    name: "Туманность Орла",
+    nickname: "«Столпы Творения»",
+    dist: "6 500 св. лет",
+    size: "70 × 55 св. лет",
+    color: "from-emerald-500/20 to-teal-500/20",
+    border: "border-emerald-500/30",
+    emoji: "🦅",
+    desc: "Самая известная фотография NASA — огромные столбы газа и пыли, внутри которых рождаются новые звёзды. Снята телескопом Хаббл в 1995 году и стала символом космической красоты.",
+  },
+  {
+    name: "Туманность Краб",
+    nickname: "Остаток сверхновой",
+    dist: "6 500 св. лет",
+    size: "11 св. лет",
+    color: "from-red-500/20 to-orange-500/20",
+    border: "border-red-500/30",
+    emoji: "🦀",
+    desc: "Остаток взрыва сверхновой 1054 года, который видели китайские астрономы как «гостевую звезду». В центре — пульсар, вращающийся 30 раз в секунду.",
+  },
+  {
+    name: "Туманность Конская Голова",
+    nickname: "Тёмная туманность",
+    dist: "1 500 св. лет",
+    size: "3.5 × 2.5 св. лет",
+    color: "from-violet-500/20 to-purple-500/20",
+    border: "border-violet-500/30",
+    emoji: "🐴",
+    desc: "Силуэт тёмного облака пыли на фоне яркой эмиссионной туманности IC 434. Форма напоминает голову лошади. Расположена в созвездии Ориона.",
+  },
+  {
+    name: "Туманность Тарантул",
+    nickname: "30 Золотой рыбы",
+    dist: "160 000 св. лет",
+    size: "1 000 св. лет",
+    color: "from-yellow-500/20 to-amber-500/20",
+    border: "border-yellow-500/30",
+    emoji: "🕷️",
+    desc: "Крупнейшая известная область звездообразования в Местной группе галактик. Если бы она была на месте Туманности Ориона — её свет отбрасывал бы тени на Земле.",
   },
 ];
 
@@ -723,6 +979,194 @@ const Index = () => {
               «Космос внутри нас. Мы сделаны из звёздного вещества. Мы — способ, которым Космос познаёт сам себя»
             </blockquote>
             <cite className="font-oswald text-xs tracking-widest text-cosmos-purple mt-4 block">— Карл Саган</cite>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== BLACK HOLES & NEBULAE ===== */}
+      <section id="blackholes" className="relative z-10 py-24 overflow-hidden">
+        <div className="nebula-bg w-[700px] h-[700px] top-1/2 right-0 -translate-y-1/2 bg-purple-900/15" />
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="reveal text-center mb-16">
+            <span className="font-oswald text-xs tracking-[0.4em] text-cosmos-purple uppercase">Самые загадочные объекты</span>
+            <h2 className="font-cormorant font-light mt-3" style={{ fontSize: "clamp(3rem, 7vw, 5rem)" }}>
+              Чёрные дыры <span className="gradient-text-blue italic">& туманности</span>
+            </h2>
+            <p className="text-white/40 mt-4 max-w-xl mx-auto">Объекты, где законы физики нарушаются, и места рождения новых звёзд</p>
+          </div>
+
+          {/* Black hole hero */}
+          <div className="reveal cosmos-card rounded-2xl overflow-hidden mb-10 glow-purple">
+            <div className="flex flex-col md:flex-row">
+              <div className="relative md:w-1/2 h-64 md:h-auto overflow-hidden">
+                <img
+                  src={BLACKHOLE_IMG}
+                  alt="Чёрная дыра"
+                  className="w-full h-full object-cover"
+                  style={{ filter: "saturate(1.2) brightness(0.9)" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-cosmos-dark/80" />
+              </div>
+              <div className="md:w-1/2 p-8 flex flex-col justify-center">
+                <span className="font-oswald text-xs tracking-widest text-cosmos-purple uppercase mb-2">Что такое чёрная дыра</span>
+                <h3 className="font-cormorant text-3xl mb-4">Граница без возврата</h3>
+                <p className="text-white/60 text-sm leading-relaxed mb-4">
+                  Чёрная дыра — область пространства-времени с такой сильной гравитацией, что даже свет не может её покинуть. Граница называется <span className="text-cosmos-blue">горизонтом событий</span>. За ней — сингулярность, где плотность стремится к бесконечности.
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { label: "Горизонт событий", value: "Точка невозврата" },
+                    { label: "Сингулярность", value: "Центр дыры" },
+                    { label: "Спагеттификация", value: "Растяжение тела" },
+                    { label: "Излучение Хокинга", value: "Испарение дыры" },
+                  ].map((item, i) => (
+                    <div key={i} className="p-3 rounded-lg bg-white/5 border border-purple-500/20">
+                      <div className="font-oswald text-[9px] text-cosmos-purple/70 tracking-widest mb-1">{item.label}</div>
+                      <div className="text-white/70 text-xs">{item.value}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Black holes grid */}
+          <div className="reveal mb-6">
+            <span className="font-oswald text-xs tracking-[0.3em] text-white/30 uppercase">Известные чёрные дыры</span>
+          </div>
+          <div className="grid md:grid-cols-2 gap-5 mb-16">
+            {BLACK_HOLES.map((bh, i) => (
+              <div key={i} className={`reveal cosmos-card rounded-xl border ${bh.border} overflow-hidden`} style={{ transitionDelay: `${i * 0.1}s` }}>
+                <div className={`p-5 bg-gradient-to-br ${bh.color}`}>
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h3 className="font-cormorant text-2xl">{bh.icon} {bh.name}</h3>
+                      <span className="font-oswald text-[9px] tracking-widest text-white/40">{bh.location} · {bh.distance}</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-oswald text-[9px] text-white/30 tracking-widest">МАССА</div>
+                      <div className="font-cormorant text-lg gradient-text-blue">{bh.mass}</div>
+                    </div>
+                  </div>
+                  <p className="text-white/60 text-xs leading-relaxed mb-3">{bh.desc}</p>
+                  <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                    <span className="font-oswald text-[9px] text-cosmos-gold tracking-widest">ФАКТ: </span>
+                    <span className="text-white/50 text-xs">{bh.fact}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Nebulae */}
+          <div className="reveal mb-6">
+            <span className="font-oswald text-xs tracking-[0.3em] text-white/30 uppercase">Знаменитые туманности</span>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {NEBULAE.map((n, i) => (
+              <div key={i} className={`reveal cosmos-card rounded-xl border ${n.border} overflow-hidden`} style={{ transitionDelay: `${i * 0.1}s` }}>
+                <div className={`p-5 h-full bg-gradient-to-br ${n.color}`}>
+                  <div className="text-4xl mb-3">{n.emoji}</div>
+                  <h3 className="font-cormorant text-lg mb-1">{n.name}</h3>
+                  <div className="font-oswald text-[9px] text-white/40 tracking-widest mb-3 italic">{n.nickname}</div>
+                  <div className="flex gap-3 mb-3">
+                    <div className="text-center">
+                      <div className="font-oswald text-[8px] text-white/30 tracking-widest">РАЗМЕР</div>
+                      <div className="font-cormorant text-sm text-white/70">{n.size}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="font-oswald text-[8px] text-white/30 tracking-widest">РАССТОЯНИЕ</div>
+                      <div className="font-cormorant text-sm text-white/70">{n.dist}</div>
+                    </div>
+                  </div>
+                  <p className="text-white/50 text-xs leading-relaxed">{n.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Solar system interactive */}
+          <div className="reveal mt-16 cosmos-card rounded-2xl overflow-hidden">
+            <div className="p-6 border-b border-white/5">
+              <span className="font-oswald text-xs tracking-[0.3em] text-cosmos-teal uppercase">3D анимация</span>
+              <h3 className="font-cormorant text-3xl mt-1">Солнечная система</h3>
+              <p className="text-white/40 text-xs mt-1">Наведи курсор на планету, чтобы узнать её имя</p>
+            </div>
+            <SolarSystemCanvas />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== RECORDS ===== */}
+      <section id="records" className="relative z-10 py-24 overflow-hidden">
+        <div className="nebula-bg w-[500px] h-[500px] bottom-0 left-0 bg-teal-600/8" />
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="reveal text-center mb-16">
+            <span className="font-oswald text-xs tracking-[0.4em] text-cosmos-teal uppercase">Книга рекордов вселенной</span>
+            <h2 className="font-cormorant font-light mt-3" style={{ fontSize: "clamp(3rem, 7vw, 5rem)" }}>
+              Космические <span className="gradient-text-teal">рекорды</span>
+            </h2>
+            <p className="text-white/40 mt-4 max-w-xl mx-auto">Самое большое, горячее, далёкое и удивительное во Вселенной</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              { emoji: "🔥", title: "Самая горячая звезда", value: "WR 102", temp: "210 000°C", color: "from-orange-500/20 to-red-500/20", border: "border-orange-500/30", desc: "Звезда Вольфа-Райе в созвездии Стрельца — поверхность в 35 раз горячее Солнца" },
+              { emoji: "❄️", title: "Самая холодная точка", value: "Туманность Бумеранг", temp: "−272°C", color: "from-blue-500/20 to-cyan-500/20", border: "border-blue-500/30", desc: "Холоднее абсолютного нуля быть нельзя. Она холоднее, чем реликтовое излучение космоса" },
+              { emoji: "📏", title: "Самая большая структура", value: "Геркулес-Корона Бореалис", temp: "10 млрд св. лет", color: "from-purple-500/20 to-indigo-500/20", border: "border-purple-500/30", desc: "Нить галактик длиной 10 миллиардов световых лет — крупнейшая известная структура" },
+              { emoji: "💨", title: "Быстрейшая звезда", value: "S5-HVS1", temp: "1 755 км/с", color: "from-teal-500/20 to-green-500/20", border: "border-teal-500/30", desc: "Выброшена из центра Галактики чёрной дырой — летит быстрее любого другого известного объекта" },
+              { emoji: "🌟", title: "Самая яркая звезда", value: "R136a1", temp: "8.7 млн L☉", color: "from-yellow-500/20 to-amber-500/20", border: "border-yellow-500/30", desc: "Звезда в Туманности Тарантул в 8.7 миллиона раз ярче Солнца и в 265 раз массивнее" },
+              { emoji: "🕰️", title: "Старейшая звезда", value: "Мафусаил (HD 140283)", temp: "13.8 млрд лет", color: "from-rose-500/20 to-pink-500/20", border: "border-rose-500/30", desc: "Почти ровесник Вселенной — родилась вскоре после Большого взрыва. Названа в честь библейского долгожителя" },
+              { emoji: "🌊", title: "Крупнейший водяной резервуар", value: "APM 08279+5255", temp: "140 трлн океанов", color: "from-blue-500/20 to-indigo-500/20", border: "border-blue-500/30", desc: "Квазар в 12 млрд св. лет от нас хранит воды в 140 триллионов раз больше, чем все океаны Земли" },
+              { emoji: "🎶", title: "Самый низкий звук", value: "Perseus Cluster", temp: "Си♭ -57 октав", color: "from-violet-500/20 to-purple-500/20", border: "border-violet-500/30", desc: "NASA обнаружило звуковые волны в скоплении Персея — нота Си♭ на 57 октав ниже среднего до" },
+              { emoji: "🌀", title: "Быстрейший пульсар", value: "PSR J1748-2446ad", temp: "716 об/с", color: "from-green-500/20 to-teal-500/20", border: "border-green-500/30", desc: "Нейтронная звезда диаметром 24 км вращается 716 раз в секунду. Экватор движется со скоростью 0.24c" },
+            ].map((r, i) => (
+              <div key={i} className={`reveal cosmos-card rounded-xl border ${r.border} overflow-hidden`} style={{ transitionDelay: `${i * 0.07}s` }}>
+                <div className={`p-5 h-full bg-gradient-to-br ${r.color}`}>
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="text-4xl">{r.emoji}</span>
+                    <div className="text-right">
+                      <div className="font-oswald text-[8px] text-white/30 tracking-widest">ЗНАЧЕНИЕ</div>
+                      <div className="font-cormorant text-base gradient-text-blue leading-tight">{r.temp}</div>
+                    </div>
+                  </div>
+                  <div className="font-oswald text-[9px] text-white/40 tracking-widest uppercase mb-1">{r.title}</div>
+                  <h3 className="font-cormorant text-xl mb-2">{r.value}</h3>
+                  <p className="text-white/50 text-xs leading-relaxed">{r.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Timeline */}
+          <div className="reveal mt-14 cosmos-card rounded-2xl p-8">
+            <div className="text-center mb-10">
+              <span className="font-oswald text-xs tracking-[0.3em] text-cosmos-blue/60 uppercase">Хронология</span>
+              <h3 className="font-cormorant text-3xl mt-2 gradient-text-blue">История Вселенной</h3>
+            </div>
+            <div className="relative">
+              <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cosmos-blue/50 via-cosmos-purple/30 to-transparent" />
+              {[
+                { time: "0 секунд", event: "Большой Взрыв", desc: "Рождение пространства, времени и энергии из сингулярности", side: "right" },
+                { time: "3 минуты", event: "Первые атомы", desc: "Протоны и нейтроны объединяются в ядра водорода и гелия", side: "left" },
+                { time: "380 000 лет", event: "Реликтовое излучение", desc: "Вселенная охладела — фотоны впервые смогли свободно двигаться", side: "right" },
+                { time: "200 млн лет", event: "Первые звёзды", desc: "Зажглись самые первые звёзды — массивные и горячие", side: "left" },
+                { time: "1 млрд лет", event: "Первые галактики", desc: "Звёзды начали объединяться в протогалактики", side: "right" },
+                { time: "9.2 млрд лет", event: "Рождение Солнца", desc: "Из облака газа и пыли формируется наша звезда", side: "left" },
+                { time: "13.8 млрд лет", event: "Сейчас", desc: "Вселенная продолжает расширяться с ускорением", side: "right" },
+              ].map((item, i) => (
+                <div key={i} className={`relative flex items-start gap-6 mb-8 ${item.side === "left" ? "md:flex-row-reverse" : ""}`}>
+                  <div className="relative z-10 ml-4 md:ml-0 md:w-1/2 flex justify-end">
+                    <div className={`cosmos-card rounded-xl p-4 max-w-sm ${item.side === "left" ? "md:mr-8" : "md:ml-8"}`}>
+                      <span className="font-oswald text-[9px] text-cosmos-blue/60 tracking-widest">{item.time}</span>
+                      <h4 className="font-cormorant text-lg mt-1">{item.event}</h4>
+                      <p className="text-white/50 text-xs mt-1 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                  <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-cosmos-blue border-2 border-cosmos-dark mt-1" style={{ boxShadow: "0 0 10px rgba(0,200,255,0.5)" }} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
